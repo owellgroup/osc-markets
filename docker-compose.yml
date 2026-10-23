@@ -1,6 +1,9 @@
-# Dokploy stack. Traefik already binds 80/443/8080 on the host.
-# Do not publish those ports. Attach a domain to the `web` service in Dokploy (container port 80).
-# The browser talks only to `web`. Nginx proxies /api to the `api` container.
+# Dokploy already owns 80, 443 and 8080. Do not bind those.
+# Open these on the server IP:
+#   Site:  http://145.241.187.174:5186
+#   Admin: http://145.241.187.174:5186/admin
+#   API:   http://145.241.187.174:8286
+# Nginx on web still proxies /api to the api container.
 
 services:
   api:
@@ -12,9 +15,9 @@ services:
       SERVER_PORT: "8286"
       SERVER_ADDRESS: "0.0.0.0"
       CORS_ORIGINS: "*"
-      SITE_URL: ${SITE_URL:-http://145.241.187.174}
-    expose:
-      - "8286"
+      SITE_URL: http://145.241.187.174:5186
+    ports:
+      - "8286:8286"
     restart: unless-stopped
 
   web:
@@ -22,8 +25,8 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: ""
-    expose:
-      - "80"
+    ports:
+      - "5186:80"
     depends_on:
       - api
     restart: unless-stopped
