@@ -1,4 +1,8 @@
-export const API_URL = ((import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8286').replace(/\/+$/, '')
+const rawApi = import.meta.env.VITE_API_URL as string | undefined
+export const API_URL = (rawApi && rawApi.length > 0
+  ? rawApi
+  : import.meta.env.DEV ? 'http://localhost:8286' : ''
+).replace(/\/+$/, '')
 
 const TOKEN_KEY = 'osc.admin.token'
 
