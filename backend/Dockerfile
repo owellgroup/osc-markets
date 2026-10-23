@@ -10,5 +10,5 @@ RUN ./mvnw -q -DskipTests package \
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 COPY --from=build /src/app.jar /app/app.jar
-EXPOSE 8080
+EXPOSE 8286
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
