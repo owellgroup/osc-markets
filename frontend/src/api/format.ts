@@ -1,6 +1,6 @@
-export function money(value: number | null | undefined, currency = 'ZAR'): string {
+export function money(value: number | null | undefined, currency = 'NAD'): string {
   if (value === null || value === undefined) return '-'
-  const symbol = currency === 'ZAR' ? 'R' : currency
+  const symbol = currency === 'NAD' || !currency ? 'N$' : currency === 'ZAR' ? 'R' : currency
   return `${symbol} ${value.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 

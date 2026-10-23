@@ -102,14 +102,21 @@ public class DotEnvEnvironmentPostProcessor implements EnvironmentPostProcessor,
                 String value = stripQuotes(line.substring(eq + 1).trim());
                 if (!out.containsKey(key)) out.put(key, value);
                 String alias = ALIASES.get(key);
-                if (alias != null && System.getenv(alias) == null && !out.containsKey(alias)) {
-                    out.put(alias, value);
+                if (alias != null && System.getenv(alias) == null) {
+                    Object existing = out.get(alias);
+                    if (existing == null || ("SPRING_MAIL_FROM".equals(alias) && !looksLikeEmail(String.valueOf(existing)) && looksLikeEmail(value))) {
+                        out.put(alias, value);
+                    }
                 }
             }
         } catch (IOException ignored) {
             // Startup continues; missing or unreadable .env just means placeholders stay unresolved.
         }
         return out;
+    }
+
+    private boolean looksLikeEmail(String value) {
+        return value != null && value.contains("@") && value.indexOf('@') > 0 && value.indexOf('@') < value.length() - 1;
     }
 
     private String stripQuotes(String value) {

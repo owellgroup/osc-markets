@@ -447,8 +447,13 @@ public class QuoteDocumentService {
 
     private String money(Quote q, BigDecimal value) {
         BigDecimal v = value == null ? BigDecimal.ZERO : value;
-        String symbol = "ZAR".equalsIgnoreCase(q.getCurrency()) ? "R" : q.getCurrency();
-        return symbol + " " + String.format(Locale.US, "%,.2f", v).replace(',', ' ');
+        return moneySymbol(q.getCurrency()) + " " + String.format(Locale.US, "%,.2f", v).replace(',', ' ');
+    }
+
+    private String moneySymbol(String currency) {
+        if (currency == null || "NAD".equalsIgnoreCase(currency)) return "N$";
+        if ("ZAR".equalsIgnoreCase(currency)) return "R";
+        return currency;
     }
 
     private boolean positive(BigDecimal v) {

@@ -28,11 +28,20 @@ public class EmailService {
     public record Attachment(String fileName, byte[] content, String contentType) {
     }
 
+    private String fromAddress() {
+        String from = props.getMail().getFrom();
+        if (from != null && from.contains("@") && from.indexOf('@') > 0 && from.indexOf('@') < from.length() - 1) {
+            return from.trim();
+        }
+        log.warn("SPRING_MAIL_FROM '{}' is not a valid email. Using hello@notifications.wayaspot.com", from);
+        return "hello@notifications.wayaspot.com";
+    }
+
     /** Sends an email and throws if it cannot be delivered to the mail server. */
     public void send(String to, String subject, String html, Attachment... attachments) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
-        helper.setFrom(props.getMail().getFrom(), props.getMail().getFromName());
+        helper.setFrom(fromAddress(), props.getMail().getFromName());
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(html, true);

@@ -60,7 +60,7 @@ public class Quote {
     private String questions;
 
     // ---- OSC pricing & terms
-    private String currency = "ZAR";
+    private String currency = "NAD";
     @Column(precision = 14, scale = 2)
     private BigDecimal productsSubtotal = BigDecimal.ZERO;
     @Column(precision = 14, scale = 2)
