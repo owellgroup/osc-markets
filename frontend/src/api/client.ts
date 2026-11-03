@@ -1,7 +1,7 @@
 const rawApi = import.meta.env.VITE_API_URL as string | undefined
 export const API_URL = (rawApi && rawApi.length > 0
   ? rawApi
-  : import.meta.env.DEV ? 'http://oscstore-oscstoresystem-tb9key-9c6e97-92-4-136-176.sslip.io' : ''
+  : import.meta.env.DEV ? 'http://92.4.136.176:8286' : ''
 ).replace(/\/+$/, '')
 
 const TOKEN_KEY = 'osc.admin.token'
