@@ -15,7 +15,7 @@ services:
       SERVER_PORT: "8286"
       SERVER_ADDRESS: "0.0.0.0"
       CORS_ORIGINS: "*"
-      SITE_URL: http://145.241.187.174:5186
+      SITE_URL: http://92.4.136.176:5186
     ports:
       - "8286:8286"
     restart: unless-stopped
