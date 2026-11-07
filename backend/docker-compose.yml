@@ -1,0 +1,16 @@
+# Backend only. Deploy this directory on its own.
+# API: http://92.4.136.176:8286
+# Fill in .env in this directory before starting.
+
+services:
+  api:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      SERVER_PORT: "8286"
+      SERVER_ADDRESS: "0.0.0.0"
+    ports:
+      - "8286:8286"
+    restart: unless-stopped

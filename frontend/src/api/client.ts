@@ -1,8 +1,6 @@
+const LIVE_API = 'http://92.4.136.176:8286'
 const rawApi = import.meta.env.VITE_API_URL as string | undefined
-export const API_URL = (rawApi && rawApi.length > 0
-  ? rawApi
-  : import.meta.env.DEV ? 'http://92.4.136.176:8286' : ''
-).replace(/\/+$/, '')
+export const API_URL = (rawApi && rawApi.length > 0 ? rawApi : LIVE_API).replace(/\/+$/, '')
 
 const TOKEN_KEY = 'osc.admin.token'
 
