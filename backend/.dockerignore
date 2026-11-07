@@ -2,6 +2,5 @@ target
 .tmp
 .idea
 *.log
-.env
 .env.*
 !.env.example

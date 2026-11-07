@@ -6,26 +6,28 @@ OSC admins price the request and the system emails a formal quotation with a PDF
 - `backend/`: Spring Boot 3 (Java 21), PostgreSQL, MinIO, JWT security. Deployed on its own, port **8286**.
 - `frontend/`: React 18 + TypeScript + Vite. Deployed on its own, port **5173**. It calls the live API at `http://92.4.136.176:8286`.
 
-The two apps do not share a Docker Compose file. Each directory has its own `Dockerfile`, `docker-compose.yml`, and `.env`.
+Each app is deployed from its own `Dockerfile` and `.env`. There is no Docker Compose file.
 
 ## Deploy
 
-Backend and frontend are separate. Start each one from its own directory.
+Backend and frontend are separate. Build and run each one from its own directory.
 
-**API** (port 8286). Fill `backend/.env` first (database, mail, MinIO):
+**API** (port 8286). Fill `backend/.env` first (database, mail, MinIO). The image copies that file and loads it on start:
 
 ```
 cd backend
-docker compose up -d --build
+docker build -t osc-markets-api .
+docker run -d --name osc-markets-api --restart unless-stopped --env-file .env -p 8286:8286 osc-markets-api
 ```
 
 Live API: http://92.4.136.176:8286
 
-**Site** (port 5173). `frontend/.env` already points at that API:
+**Site** (port 5173). `frontend/.env` is read when the image is built and points at that API:
 
 ```
 cd frontend
-docker compose up -d --build
+docker build -t osc-markets-web .
+docker run -d --name osc-markets-web --restart unless-stopped -p 5173:5173 osc-markets-web
 ```
 
 Live site: http://92.4.136.176:5173
@@ -33,7 +35,7 @@ Admin panel: http://92.4.136.176:5173/admin
 
 ## Run locally
 
-1. Start the API (needs Java 21; Maven is downloaded by the wrapper). Docker Compose loads `backend/.env`; a local Maven run uses the same variable names from the shell:
+1. Start the API (needs Java 21; Maven is downloaded by the wrapper). Use the same variable names as `backend/.env`:
 
    ```
    cd backend
@@ -68,7 +70,7 @@ VITE_API_URL=http://92.4.136.176:8286
 
 ## Backend configuration (environment variables)
 
-Set these in `backend/.env`. Docker Compose passes that file into the API container.
+Set these in `backend/.env`. The API image loads that file on start, and `docker run --env-file .env` passes the same values in.
 
 | Variable | Purpose |
 | --- | --- |
